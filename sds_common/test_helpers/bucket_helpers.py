@@ -1,6 +1,7 @@
+from __future__ import annotations
 def delete_blobs_with_test_survey_id(bucket, test_survey_id: str):
     """
-    Method to delete all blobs related to the test survey id in the specified bucket.
+    Deletes all blobs with the given survey ID prefix from the specified bucket.
 
     :param bucket: the bucket to clean
     :param test_survey_id: the test survey id

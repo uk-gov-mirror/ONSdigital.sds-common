@@ -28,33 +28,32 @@ class Schema:
         """
         try:
             survey_id = cls._get_survey_id_from_json(schema_json)
-        except (KeyError, IndexError):
-            raise SurveyIDError(filepath) from None
+        except (KeyError, IndexError) as error:
+            raise SurveyIDError(filepath) from error
 
         try:
             schema_version = cls._get_schema_version_from_json(schema_json)
-        except KeyError:
-            raise SchemaVersionError(filepath) from None
+        except KeyError as error:
+            raise SchemaVersionError(filepath) from error
 
         return cls(schema_json, survey_id, schema_version, filepath)
 
     @staticmethod
-    def _get_survey_id_from_json(schema_json: dict) -> str | None:
+    def _get_survey_id_from_json(schema_json: dict) -> str:
         """
         Fetches the survey ID from the schema JSON.
 
         :param schema_json: the schema JSON.
-        :return dict: the survey ID.
-        :return None: if not found.
+        :return str: the survey ID.
         """
         return schema_json["properties"]["survey_id"]["enum"][0]
 
     @staticmethod
-    def _get_schema_version_from_json(schema_json: dict) -> str | None:
+    def _get_schema_version_from_json(schema_json: dict) -> str:
         """
         Fetches the schema version from the schema JSON.
 
         :param schema_json: the schema JSON.
-        :return dict: the schema version.
+        :return str: the schema version.
         """
         return schema_json["properties"]["schema_version"]["const"]

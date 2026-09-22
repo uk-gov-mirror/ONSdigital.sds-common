@@ -1,46 +1,56 @@
 [project]
 name = "sds-common"
-version = "1.0.39"
+version = "2.0.0"
 description = "A Python library for common functionality used to interact with SDS."
 requires-python = "==3.13.*"
+classifiers = [
+    "Typing :: Typed",
+]
 dependencies = [
-    "cloudevents==1.11.0",
-    "google-auth==2.57.0",
-    "google-cloud-secret-manager==2.30.0",
-    "google-cloud-pubsub==2.39.2",
-    "google-cloud-storage==3.13.1",
-    "google-cloud-firestore==2.29.0",
-    "firebase-admin==7.5.0",
-    "requests==2.32.3", # Latency issue, do not push version
-    "pydantic_settings==2.15.0",
-    "python-dotenv==1.2.3",
-    "pip_audit==2.10.1",
-    "setuptools==84.0.0",
-    "pytest-order==1.5.0",
+    "google-auth>=2.57.0",
+    "google-cloud-secret-manager>=2.30.0",
+    "google-cloud-pubsub>=2.39.2",
+    "google-cloud-storage>=3.13.1",
+    "google-cloud-firestore>=2.29.0",
+    "requests>=2.32.3",
+]
+
+[project.optional-dependencies]
+impersonation = [
     "google-cloud-iam>=2.25.0",
 ]
 
 [dependency-groups]
-dev = [
+test = [
     "pytest>=8.3.5",
     "pytest-cov>=6.1.1",
     "pytest-xdist>=3.6.1",
+    "pytest-order>=1.5.0",
 ]
 
 lint = [
     "ruff>=0.11.7",
 ]
 
-version-check = [
- "toml>=0.10.2",
- "tomlkit>=0.13.3",
+publish = [
+    "twine>=6.1.0",
+    "keyring>=25.6.0",
+    "keyrings-google-artifactregistry-auth>=1.1.2",
 ]
+
+version-check = [
+    "toml>=0.10.2",
+    "tomlkit>=0.13.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--disable-warnings"
 
 [tool.ruff]
 line-length = 121
 exclude = [ "lib", "__pycache__", ".venv",]
 
 [tool.ruff.lint]
-extend-select = [ "E303", "W391", "W292", "E302"]
-preview = true
+extend-select = ["W292"]
 

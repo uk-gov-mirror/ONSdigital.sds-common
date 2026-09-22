@@ -1,5 +1,7 @@
 import os
 
+from sds_common.models.config_errors import EnvironmentVariableError
+
 
 class ConfigHelpers:
     @staticmethod
@@ -39,13 +41,13 @@ class ConfigHelpers:
         env_value: str, default_value: str | None = None
     ) -> str | bool:
         """
-        Method to determine if a desired environment variable has been set and return it.
+        Returns the value of the specified environment variable, or the default if provided.
         If an environment variable or default value are not set an exception is raised.
 
         :param env_value: value to check environment for
         :param default_value: optional argument to allow defaulting of values
         :return str: the environment value corresponding to the input
-        :raises Exception: if the environment variable is not set and no default value is provided
+        :raises EnvironmentVariableError: if the environment variable is not set and no default value is provided
         """
         value = os.environ.get(env_value)
 
@@ -55,4 +57,4 @@ class ConfigHelpers:
         if default_value is not None:
             return default_value
 
-        raise Exception(f"The environment variable {env_value} must be set to proceed")
+        raise EnvironmentVariableError(env_value)

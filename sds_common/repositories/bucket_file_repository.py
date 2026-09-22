@@ -1,8 +1,9 @@
+from __future__ import annotations
 import json
 import os
 
 from google.cloud import storage
-from sds_common.config.logging_config import logging
+import logging
 from sds_common.interfaces.file_repository_interface import FileRepositoryInterface
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ class BucketFileRepository(FileRepositoryInterface):
         """
         return json.loads(self.bucket.blob(filename).download_as_string())
 
-    def upload_file_from_path(self, filepath: str):
+    def upload_file_from_path(self, filepath: str) -> None:
         """
         Uploads a file to the bucket from a local file path.
 
@@ -31,7 +32,7 @@ class BucketFileRepository(FileRepositoryInterface):
         blob = self.bucket.blob(filename)
         blob.upload_from_filename(filepath)
 
-    def delete_file(self, filename: str):
+    def delete_file(self, filename: str) -> None:
         """
         Deletes a file from the bucket with the specified filename.
 

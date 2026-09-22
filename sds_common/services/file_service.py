@@ -1,14 +1,12 @@
-from sds_common.enums.buckets import Bucket
-from sds_common.repositories.bucket_loader import BucketLoader
-from sds_common.repositories.bucket_file_repository import BucketFileRepository
+from __future__ import annotations
+from sds_common.interfaces.file_repository_interface import FileRepositoryInterface
 
 
-class FileService():
-    def __init__(self, bucket: Bucket, loader: BucketLoader, repository_cls=BucketFileRepository):
-        self.bucket = loader.fetch_bucket(bucket)
-        self.bucket_repository = repository_cls(self.bucket)
+class FileService:
+    def __init__(self, bucket_repository: FileRepositoryInterface) -> None:
+        self.bucket_repository = bucket_repository
 
-    def upload_file(self, filepath: str):
+    def upload(self, filepath: str) -> None:
         """
         Uploads a file to the associated bucket.
 
@@ -16,7 +14,7 @@ class FileService():
         """
         self.bucket_repository.upload_file_from_path(filepath)
 
-    def retrieve_json_file(self, filename: str) -> dict:
+    def get_json(self, filename: str) -> dict:
         """
         Retrieves a JSON file from the associated bucket.
 
@@ -25,7 +23,7 @@ class FileService():
         """
         return self.bucket_repository.get_file_as_json(filename)
 
-    def delete_file(self, filename: str):
+    def delete(self, filename: str) -> None:
         """
         Deletes a file from the associated bucket.
 
@@ -33,9 +31,9 @@ class FileService():
         """
         self.bucket_repository.delete_file(filename)
 
-    def check_file_exists(self, filename: str) -> bool:
+    def exists(self, filename: str) -> bool:
         """
-        Checks if the file exists in the associated bucket.
+        Returns True if the file exists in the associated bucket.
 
         :param filename: Name of the file to be checked.
         :return bool: True if the file exists, False otherwise.

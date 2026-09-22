@@ -1,25 +1,22 @@
+from __future__ import annotations
 import time
 
-from google.cloud import storage
-from sds_common.test_helpers.firebase_loader import firebase_loader
-from sds_common.test_helpers.firestore_helpers import (
-    perform_delete_on_collection_with_test_survey_id,
-)
-from sds_common.test_helpers.pub_sub_helper import PubSubHelper
 from sds_common.test_helpers.common_test_data import test_survey_id
+from sds_common.test_helpers.firebase_loader import FirebaseLoader
+from sds_common.test_helpers.firestore_helpers import perform_delete_on_collection_with_test_survey_id
+from sds_common.test_helpers.pub_sub_helper import PubSubHelper
 
-storage_client = storage.Client()
 
-
-def cleanup():
+def cleanup(firebase_loader: FirebaseLoader):
     """
-    Method to clean up all schema test data created in buckets/FireStore.
+    Cleans up all schema test data created in buckets/FireStore.
     Should be run before and after test to account for test failures.
     """
     client = firebase_loader.get_client()
-
     perform_delete_on_collection_with_test_survey_id(
-        client, firebase_loader.get_schemas_collection(), test_survey_id
+        client,
+        firebase_loader.get_schemas_collection(),
+        test_survey_id,
     )
 
 
@@ -40,14 +37,14 @@ def pubsub_purge_messages(pubsub_helper: PubSubHelper, subscriber_id: str):
 
 def inject_wait_time(seconds: int):
     """
-    Method to inject a wait time into the test to allow resources properly spin up and tear down.
+    Injects a wait time to allow GCP resources to spin up and tear down.
 
     :param seconds: the number of seconds to wait
     """
     time.sleep(seconds)
 
 
-def poll_subscription(pubsub_helper, subscriber_id, timeout=45) -> list[dict] | None:
+def poll_subscription(pubsub_helper: PubSubHelper, subscriber_id: str, timeout: int = 45) -> list[dict] | None:
     """
     Polls a subscription for messages until the timeout is reached.
     """
